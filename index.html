@@ -170,6 +170,7 @@
             justify-content: space-between;
             align-items: flex-end;
             padding-top: 40px;
+            padding-bottom: 60px;
             opacity: 0;
             animation: fadeIn 1s ease-in-out 7.5s forwards;
             font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
@@ -464,6 +465,15 @@
             changePage(2);
         });
 
+        // ===== 페이지 1 클릭/터치 시 즉시 페이지 2로 =====
+        document.getElementById('page1').addEventListener('click', () => {
+            changePage(2);
+        });
+
+        document.getElementById('page1').addEventListener('keydown', () => {
+            changePage(2);
+        });
+
         // ===== 토끼1 클릭 → 페이지 3 =====
         document.getElementById('rabbit1Trigger').addEventListener('click', () => {
             changePage(3);
@@ -472,6 +482,10 @@
         // ===== 페이지 3 클릭 → 페이지 1 (순환) =====
         document.getElementById('page3').addEventListener('click', () => {
             changePage(1);
+            // 영상 재시작
+            const video = document.getElementById('page1').querySelector('video');
+            video.currentTime = 0;
+            video.play();
             // 3초 후 다시 자동 시작
             setTimeout(() => {
                 changePage(2);
@@ -545,16 +559,8 @@
         }
 
         function animateAllNumbers(data) {
-            // 메인 숫자 (2초)
-            animateNumber(document.getElementById('mainNumber'), data.mainNumber, 2000, 1000);
-            
-            // 개별 숫자들 (스태거 효과)
-            animateNumber(document.getElementById('childrenKilled'), data.childrenKilled, 1500, 1300);
-            animateNumber(document.getElementById('womenKilled'), data.womenKilled, 1500, 1600);
-            animateNumber(document.getElementById('pressKilled'), data.pressKilled, 1500, 1900);
-            animateNumber(document.getElementById('medicalKilled'), data.medicalKilled, 1500, 2200);
-            animateNumber(document.getElementById('injured'), data.injured, 1500, 2500);
-            animateNumber(document.getElementById('starved'), data.starved, 1500, 2800);
+            // 메인 숫자만 (2초) - 즉시 시작
+            animateNumber(document.getElementById('mainNumber'), data.mainNumber, 2000, 0);
         }
 
         async function loadAndAnimateData() {
