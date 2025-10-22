@@ -149,6 +149,10 @@
             flex-direction: column;
         }
 
+        .stat-item:first-child .stat-number {
+            color: #FF0000;
+        }
+
         .stat-number {
             font-size: 48px;
             font-weight: 900;
@@ -163,6 +167,10 @@
             letter-spacing: 2px;
             color: black;
             font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
+        }
+
+        .stat-item:first-child .stat-label {
+            color: #FF0000;
         }
 
         .bottom-section {
@@ -257,6 +265,23 @@
             animation: fadeIn 1s ease-in-out 3s forwards;
             opacity: 0;
             font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
+        }
+
+        .qr-code-container {
+            position: absolute;
+            bottom: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            animation: qrRiseUp 2s ease-out 2.5s forwards;
+            z-index: 3;
+        }
+
+        .qr-code-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* ===== 애니메이션 ===== */
@@ -438,8 +463,11 @@
             
             <div class="page3-content">
                 <h1 class="page3-title">BROKEN HEART</h1>
-                <p class="page3-text">A project documenting the human cost of conflict</p>
                 <p class="page3-text">Click anywhere to return</p>
+            </div>
+            
+            <div class="qr-code-container">
+                <img src="qr-code.png" alt="QR Code" class="qr-code-image">
             </div>
         </div>
     </div>
@@ -555,8 +583,16 @@
         }
 
         function animateAllNumbers(data) {
-            // 메인 숫자만 (2초) - 즉시 시작
+            // 메인 숫자 (2초) - 즉시 시작
             animateNumber(document.getElementById('mainNumber'), data.mainNumber, 2000, 0);
+            
+            // 개별 숫자들 (스태거 효과 - 차례대로)
+            animateNumber(document.getElementById('childrenKilled'), data.childrenKilled, 1500, 300);
+            animateNumber(document.getElementById('womenKilled'), data.womenKilled, 1500, 600);
+            animateNumber(document.getElementById('pressKilled'), data.pressKilled, 1500, 900);
+            animateNumber(document.getElementById('medicalKilled'), data.medicalKilled, 1500, 1200);
+            animateNumber(document.getElementById('injured'), data.injured, 1500, 1500);
+            animateNumber(document.getElementById('starved'), data.starved, 1500, 1800);
         }
 
         async function loadAndAnimateData() {
