@@ -63,17 +63,54 @@ position: relative;
 width: 100%;
 height: 100%;
 display: flex;
-flex-direction: column;
+flex-direction: row;
  }
-.background-typo {
+
+/* 왼쪽 이미지 슬라이드 영역 */
+.left-image-section {
+width: 30%;
+height: 100%;
+object-fit: cover;
+position: relative;
+overflow: hidden;
+background: #f0f0f0;
+}
+
+.slide-container {
 position: absolute;
-top: 0;
-left: 0;
 width: 100%;
 height: 100%;
+opacity: 0;
+transition: opacity 1s ease-in-out;
+}
+
+.slide-container.active {
+opacity: 1;
+}
+
+.slide-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+/* 오른쪽 콘텐츠 영역 */
+.right-content-section {
+width: 70%;
+height: 100%;
+position: relative;
+}
+
+.background-typo {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 80%;
+height: auto;
 opacity: 0.08;
 animation: fadeInBg 1.5s ease-in-out 5.5s forwards;
-object-fit: cover;
+object-fit: contain;
 z-index: 1;
  }
 .page2-content {
@@ -88,7 +125,7 @@ height: 100%;
 .top-section {
 display: flex;
 justify-content: space-between;
-font-size: 14px;
+font-size: 20px;
 opacity: 0;
 animation: fadeIn 1s ease-in-out 5.5s forwards;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
@@ -110,7 +147,7 @@ animation: fadeIn 1s ease-in-out 6s forwards;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
  }
 .main-number {
-font-size: 180px;
+font-size: 140px;
 font-weight: 900;
 color: black;
 line-height: 1;
@@ -122,8 +159,8 @@ font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
 .stats-section {
 display: grid;
 grid-template-columns: repeat(3, 1fr);
-gap: 60px 100px;
-margin-top: 80px;
+gap: 40px 60px;
+margin-top: 60px;
 opacity: 0;
 animation: fadeIn 1s ease-in-out 7s forwards;
  }
@@ -135,16 +172,16 @@ flex-direction: column;
 color: #FF0000;
  }
 .stat-number {
-font-size: 48px;
+font-size: 36px;
 font-weight: 900;
-margin-bottom: 20px;
+margin-bottom: 10px;
 color: black;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
  }
 .stat-label {
-font-size: 14px;
+font-size: 12px;
 font-weight: 700;
-letter-spacing: 2px;
+letter-spacing: 1.5px;
 color: black;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
  }
@@ -162,7 +199,7 @@ animation: fadeIn 1s ease-in-out 7.5s forwards;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
  }
 .bottom-text {
-font-size: 14px;
+font-size: 20px;
 color: black;
  }
 .rabbit1-container {
@@ -228,69 +265,192 @@ font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
 .page3-text {
 font-size: 24px;
 line-height: 1.8;
-margin-bottom: -80px;
+margin-bottom: 10px;
 animation: fadeIn 1s ease-in-out 3s forwards;
 opacity: 0;
 font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
  }
-.qr-code-container {
-position: absolute;
-bottom: -300px;
-left: 50%;
-transform: translateX(-50%);
-width: 200px;
-height: 200px;
-animation: qrRiseUp 2s ease-out 2.5s forwards;
-z-index: 3;
- }
-.qr-code-image {
+
+/* ===== 감상평 버튼 (고정) ===== */
+.review-button {
+position: fixed;
+bottom: 30px;
+left: 30px;
+background: black;
+color: white;
+border: 2px solid black;
+padding: 15px 30px;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 2px;
+cursor: pointer;
+text-transform: uppercase;
+transition: all 0.3s ease;
+z-index: 1000;
+display: none;
+}
+
+.review-button.show {
+display: block;
+animation: slideInLeft 0.5s ease-out;
+}
+
+.review-button:hover {
+background: white;
+color: black;
+transform: translateX(5px);
+}
+
+@keyframes slideInLeft {
+from {
+transform: translateX(-100px);
+opacity: 0;
+}
+to {
+transform: translateX(0);
+opacity: 1;
+}
+}
+
+@keyframes slideInLeft {
+from {
+transform: translateX(-100px);
+opacity: 0;
+}
+to {
+transform: translateX(0);
+opacity: 1;
+}
+}
+
+/* ===== 모달 스타일 ===== */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
 width: 100%;
 height: 100%;
-object-fit: contain;
- }
+background: rgba(0, 0, 0, 0.95);
+z-index: 2000;
+display: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+}
 
-/* ===== PAGE 4: 감상평 페이지 ===== */
-#page4 {
-background-color: black;
-flex-direction: column;
+.modal-overlay.active {
+display: block;
+opacity: 1;
+}
+
+.modal-container {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 90%;
+max-width: 900px;
+height: 90vh;
+background: white;
+z-index: 2001;
+display: none;
+opacity: 0;
+transition: all 0.3s ease;
 overflow-y: auto;
-overflow-x: hidden;
 }
 
-.page4-container {
-width: 100%;
-min-height: 100vh;
-padding: 40px 20px;
+.modal-container.active {
+display: block;
+opacity: 1;
 }
 
-.reviews-header {
-text-align: center;
-margin-bottom: 40px;
-padding: 20px;
-}
-
-.reviews-title {
-font-size: 48px;
-font-weight: 900;
+.modal-header {
+background: black;
 color: white;
-margin-bottom: 10px;
-font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
+padding: 30px;
+position: sticky;
+top: 0;
+z-index: 10;
+}
+
+.modal-title {
+font-size: 72px;
+font-weight: 900;
+margin-bottom: 5px;
 letter-spacing: -1px;
 }
 
-.reviews-subtitle {
-font-size: 18px;
+.modal-subtitle {
+font-size: 14px;
 color: #888;
-font-family: 'Akzidenz Grotesk', 'Poppins', Arial, sans-serif;
+letter-spacing: 1px;
 }
 
-/* 감상평 작성 폼 */
-.review-form {
+.close-modal {
+position: absolute;
+top: 30px;
+right: 30px;
+background: transparent;
+border: 2px solid white;
+color: white;
+width: 40px;
+height: 40px;
+font-size: 24px;
+cursor: pointer;
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.close-modal:hover {
 background: white;
-max-width: 800px;
-margin: 0 auto 40px;
+color: black;
+transform: rotate(90deg);
+}
+
+.modal-content {
 padding: 30px;
-border-radius: 0;
+}
+
+/* 탭 네비게이션 */
+.tab-nav {
+display: flex;
+gap: 10px;
+margin-bottom: 30px;
+border-bottom: 2px solid black;
+}
+
+.tab-btn {
+background: transparent;
+border: none;
+padding: 10px 20px;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 1px;
+cursor: pointer;
+text-transform: uppercase;
+transition: all 0.3s ease;
+border-bottom: 3px solid transparent;
+margin-bottom: -2px;
+}
+
+.tab-btn.active {
+border-bottom-color: #FF0000;
+color: #FF0000;
+}
+
+.tab-content {
+display: none;
+}
+
+.tab-content.active {
+display: block;
+animation: fadeIn 0.3s ease;
+}
+
+/* 감상평 작성 폼 (모달 내부) */
+.modal-form {
+margin-bottom: 40px;
 }
 
 .form-group {
@@ -326,93 +486,91 @@ color: white;
 
 .form-group textarea {
 resize: vertical;
-min-height: 120px;
+min-height: 100px;
 }
 
 .submit-btn {
 background: black;
 color: white;
 border: 2px solid black;
-padding: 15px 40px;
+padding: 12px 30px;
 font-size: 14px;
 font-weight: 700;
 letter-spacing: 2px;
 cursor: pointer;
 text-transform: uppercase;
 transition: all 0.3s ease;
-width: 100%;
 }
 
 .submit-btn:hover {
-background: white;
-color: black;
+background: #FF0000;
+border-color: #FF0000;
 }
 
-/* 감상평 목록 */
+/* 감상평 목록 (모달 내부) */
 .reviews-list {
-max-width: 800px;
-margin: 0 auto;
+max-height: 500px;
+overflow-y: auto;
 }
 
 .review-item {
-background: white;
-margin-bottom: 20px;
-padding: 30px;
+background: #f8f8f8;
+margin-bottom: 15px;
+padding: 20px;
 position: relative;
-border: 2px solid white;
 transition: all 0.3s ease;
+border-left: 3px solid transparent;
 }
 
 .review-item:hover {
-border-color: #FF0000;
+border-left-color: #FF0000;
+background: #fff;
 }
 
 .review-header {
 display: flex;
 justify-content: space-between;
 align-items: center;
-margin-bottom: 15px;
-padding-bottom: 15px;
-border-bottom: 1px solid #e0e0e0;
+margin-bottom: 10px;
 }
 
 .review-author {
-font-weight: 900;
-font-size: 18px;
+font-weight: 700;
+font-size: 16px;
 text-transform: uppercase;
 letter-spacing: 1px;
 }
 
 .review-date {
 color: #888;
-font-size: 12px;
+font-size: 11px;
 letter-spacing: 1px;
 }
 
 .review-title {
-font-size: 24px;
+font-size: 20px;
 font-weight: 700;
-margin-bottom: 15px;
+margin-bottom: 10px;
 }
 
 .review-content {
-line-height: 1.8;
+line-height: 1.6;
 color: #333;
 }
 
 .delete-btn {
 position: absolute;
-top: 15px;
-right: 15px;
-background: #FF0000;
-color: white;
-border: none;
-padding: 5px 10px;
-font-size: 11px;
+top: 10px;
+right: 10px;
+background: transparent;
+color: #FF0000;
+border: 1px solid #FF0000;
+padding: 3px 8px;
+font-size: 10px;
 letter-spacing: 1px;
 cursor: pointer;
 opacity: 0;
-transition: opacity 0.3s ease;
+transition: all 0.3s ease;
 text-transform: uppercase;
 }
 
@@ -420,48 +578,19 @@ text-transform: uppercase;
 opacity: 1;
 }
 
-/* 빈 상태 */
-.empty-state {
-text-align: center;
-padding: 60px;
+.delete-btn:hover {
+background: #FF0000;
 color: white;
 }
 
-.empty-state-text {
-font-size: 18px;
-line-height: 1.6;
-}
-
-/* 돌아가기 버튼 */
-.back-button {
-position: fixed;
-top: 30px;
-right: 30px;
-background: white;
-color: black;
-border: 2px solid white;
-padding: 10px 20px;
-font-size: 12px;
-font-weight: 700;
-letter-spacing: 2px;
-cursor: pointer;
-text-transform: uppercase;
-transition: all 0.3s ease;
-z-index: 100;
-}
-
-.back-button:hover {
+/* 통계 */
+.review-stats {
+display: flex;
+gap: 30px;
+margin-bottom: 20px;
+padding: 20px;
 background: black;
 color: white;
-}
-
-/* 감상평 통계 */
-.review-stats {
-max-width: 800px;
-margin: 0 auto 30px;
-display: flex;
-justify-content: center;
-gap: 50px;
 }
 
 .stat-box {
@@ -469,17 +598,23 @@ text-align: center;
 }
 
 .stat-value {
-font-size: 36px;
+font-size: 28px;
 font-weight: 900;
-color: white;
 }
 
 .stat-label-review {
-font-size: 12px;
+font-size: 10px;
 color: #888;
 letter-spacing: 2px;
 text-transform: uppercase;
 margin-top: 5px;
+}
+
+/* 빈 상태 */
+.empty-state {
+text-align: center;
+padding: 40px;
+color: #888;
 }
 
 /* ===== 애니메이션 ===== */
@@ -499,14 +634,6 @@ opacity: 0;
 opacity: 0.15;
  }
  }
-@keyframes typeOut {
- from {
-opacity: 1;
- }
- to {
-opacity: 0;
- }
- }
 @keyframes rabbitRiseUp {
  from {
 bottom: -200px;
@@ -517,23 +644,20 @@ bottom: 0;
 opacity: 1;
  }
  }
-@keyframes qrRiseUp {
- from {
-bottom: -300px;
- }
- to {
-bottom: 50px;
- }
-}
+
 /* ===== 모바일 반응형 ===== */
 @media (max-width: 768px) {
-.typo-image {
-width: 90%;
- }
-.text-overlay {
-font-size: 60px;
-letter-spacing: 4px;
- }
+.page2-container {
+flex-direction: column;
+}
+.left-image-section {
+width: 100%;
+height: 40%;
+}
+.right-content-section {
+width: 100%;
+height: 60%;
+}
 .page2-content {
 padding: 30px;
  }
@@ -541,21 +665,21 @@ padding: 30px;
 font-size: 20px;
  }
 .main-number {
-font-size: 80px;
+font-size: 60px;
  }
 .stats-section {
-grid-template-columns: 1fr;
-gap: 30px;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
  }
 .stat-number {
-font-size: 32px;
+font-size: 24px;
  }
 .stat-label {
-font-size: 12px;
+font-size: 10px;
  }
 .rabbit1-container {
-width: 100px;
-height: 100px;
+width: 80px;
+height: 80px;
  }
 .page3-title {
 font-size: 40px;
@@ -567,17 +691,21 @@ font-size: 14px;
 width: 250px;
 height: 250px;
  }
-.reviews-title {
-font-size: 32px;
-}
-.review-form {
-padding: 20px;
-}
-.back-button {
-top: 10px;
-right: 10px;
-padding: 8px 15px;
+.review-button {
+bottom: 20px;
+left: 20px;
+padding: 10px 20px;
 font-size: 10px;
+}
+.modal-container {
+width: 95%;
+height: 95vh;
+}
+.modal-title {
+font-size: 48px;
+}
+.modal-content {
+padding: 20px;
 }
  }
 </style>
@@ -596,6 +724,51 @@ font-size: 10px;
 <!-- ===== PAGE 2: 통계 ===== -->
 <div class="page" id="page2">
 <div class="page2-container">
+<!-- 왼쪽 이미지 슬라이드 섹션 -->
+<div class="left-image-section">
+<div class="slide-container active">
+<img src="Asset 1.png" alt="Asset 1" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 2.png" alt="Asset 2" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 3.png" alt="Asset 3" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 4.png" alt="Asset 4" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 5.png" alt="Asset 5" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 6.png" alt="Asset 6" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 7.png" alt="Asset 7" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 8.png" alt="Asset 8" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 9.png" alt="Asset 9" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 10.png" alt="Asset 10" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 11.png" alt="Asset 11" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 12.png" alt="Asset 12" class="slide-image">
+</div>
+<div class="slide-container">
+<img src="Asset 13.png" alt="Asset 13" class="slide-image">
+</div>
+</div>
+
+<!-- 오른쪽 콘텐츠 섹션 -->
+<div class="right-content-section">
 <img src="typo-no-text.png" alt="Background" class="background-typo">
 <div class="page2-content">
 <!-- 상단 텍스트 -->
@@ -637,11 +810,12 @@ font-size: 10px;
 </div>
 <!-- 하단 섹션 -->
 <div class="bottom-section">
-<p class="bottom-text">CLICK and GET QR CODE</p>
+<p class="bottom-text"></p>
 <div class="rabbit1-container" id="rabbit1Trigger">
 <img src="rabbit1.png" alt="Click to continue" class="rabbit1-image">
 </div>
-<p class="bottom-text">Genocide on your Phone</p>
+<p class="bottom-text">Go to next page</p>
+</div>
 </div>
 </div>
 </div>
@@ -653,37 +827,37 @@ font-size: 10px;
 <img src="rabbit2.png" alt="Rabbit" class="rabbit2-image">
 </div>
 <div class="page3-content">
-<p class="page3-text">Click anywhere to continue</p>
-</div>
-<div class="qr-code-container">
-<img src="qr.png" alt="QR Code" class="qr-code-image">
+<p class="page3-text">Click anywhere to return</p>
 </div>
 </div>
 </div>
 
-<!-- ===== PAGE 4: 감상평 페이지 ===== -->
-<div class="page" id="page4">
-<button class="back-button" onclick="changePage(1)">← BACK</button>
-<div class="page4-container">
-<div class="reviews-header">
-<h1 class="reviews-title">BROKEN HEART</h1>
-<p class="reviews-subtitle">Share your thoughts and reflections</p>
+<!-- ===== 감상평 버튼 (고정) ===== -->
+<button class="review-button" id="reviewButton" onclick="openModal()">
+→ REVIEWS
+</button>
+
+<!-- ===== 모달 오버레이 ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+<!-- ===== 모달 컨테이너 ===== -->
+<div class="modal-container" id="modalContainer">
+<div class="modal-header">
+<h1 class="modal-title">BROKEN HEART</h1>
+<p class="modal-subtitle">Share your thoughts and reflections</p>
+<button class="close-modal" onclick="closeModal()">×</button>
 </div>
 
-<!-- 통계 -->
-<div class="review-stats">
-<div class="stat-box">
-<div class="stat-value" id="totalReviews">0</div>
-<div class="stat-label-review">Total Reviews</div>
-</div>
-<div class="stat-box">
-<div class="stat-value" id="todayReviews">0</div>
-<div class="stat-label-review">Today</div>
-</div>
+<div class="modal-content">
+<!-- 탭 네비게이션 -->
+<div class="tab-nav">
+<button class="tab-btn active" onclick="switchTab('write')">Write Review</button>
+<button class="tab-btn" onclick="switchTab('read')">Read Reviews</button>
 </div>
 
-<!-- 작성 폼 -->
-<div class="review-form">
+<!-- 작성 탭 -->
+<div class="tab-content active" id="writeTab">
+<div class="modal-form">
 <div class="form-group">
 <label for="author">Name</label>
 <input type="text" id="author" placeholder="Enter your name" required>
@@ -698,11 +872,27 @@ font-size: 10px;
 </div>
 <button class="submit-btn" onclick="saveReview()">Submit Review</button>
 </div>
+</div>
+
+<!-- 읽기 탭 -->
+<div class="tab-content" id="readTab">
+<!-- 통계 -->
+<div class="review-stats">
+<div class="stat-box">
+<div class="stat-value" id="totalReviews">0</div>
+<div class="stat-label-review">Total Reviews</div>
+</div>
+<div class="stat-box">
+<div class="stat-value" id="todayReviews">0</div>
+<div class="stat-label-review">Today</div>
+</div>
+</div>
 
 <!-- 감상평 목록 -->
 <div class="reviews-list" id="reviewsList">
 <div class="empty-state">
-<p class="empty-state-text">No reviews yet.<br>Be the first to share your thoughts.</p>
+<p>No reviews yet. Be the first to share your thoughts.</p>
+</div>
 </div>
 </div>
 </div>
@@ -712,16 +902,24 @@ font-size: 10px;
 // ===== 페이지 관리 =====
 let currentPage = 1;
 function changePage(pageNum) {
+// 이전 페이지가 2였다면 슬라이드쇼 정지
+if (currentPage === 2) {
+stopImageSlideshow();
+}
+
 document.getElementById(`page${currentPage}`).classList.remove('active');
 document.getElementById(`page${pageNum}`).classList.add('active');
 currentPage = pageNum;
-// 페이지 2에 도착하면 API 데이터 로드
+
+// 페이지 2 이후부터 리뷰 버튼 표시
+if (pageNum >= 2) {
+document.getElementById('reviewButton').classList.add('show');
+}
+
+// ===== 페이지 2에 도착하면 API 데이터 로드 및 슬라이드 시작
 if (pageNum === 2) {
 loadAndAnimateData();
- }
- // 페이지 4에 도착하면 감상평 표시
- if (pageNum === 4) {
-displayReviews();
+startImageSlideshow();
  }
  }
 // ===== 페이지 1 → 2 자동 전환 (영상 끝난 후) =====
@@ -740,19 +938,58 @@ changePage(2);
 document.getElementById('rabbit1Trigger').addEventListener('click', () => {
 changePage(3);
  });
-// ===== 페이지 3 클릭 → 페이지 4 (감상평) =====
+// ===== 페이지 3 클릭 → 페이지 1 (순환) =====
 document.getElementById('page3').addEventListener('click', () => {
-changePage(4);
+changePage(1);
+// 영상 재시작
+const video = document.getElementById('page1').querySelector('video');
+video.currentTime = 0;
+video.play();
+// 리뷰 버튼 숨기기
+document.getElementById('reviewButton').classList.remove('show');
  });
+
+// ===== 모달 관리 =====
+function openModal() {
+document.getElementById('modalOverlay').classList.add('active');
+document.getElementById('modalContainer').classList.add('active');
+displayReviews();
+}
+
+function closeModal() {
+document.getElementById('modalOverlay').classList.remove('active');
+document.getElementById('modalContainer').classList.remove('active');
+}
+
+// 탭 전환
+function switchTab(tab) {
+// 탭 버튼 활성화 상태 변경
+document.querySelectorAll('.tab-btn').forEach(btn => {
+btn.classList.remove('active');
+});
+event.target.classList.add('active');
+
+// 탭 컨텐츠 표시
+document.querySelectorAll('.tab-content').forEach(content => {
+content.classList.remove('active');
+});
+
+if (tab === 'write') {
+document.getElementById('writeTab').classList.add('active');
+} else {
+document.getElementById('readTab').classList.add('active');
+displayReviews();
+}
+}
 
 // ===== API 데이터 로드 및 애니메이션 =====
 const defaultData = {
-mainNumber: 68277,
+mainNumber: 68528,
 childrenKilled: 20179,
 womenKilled: 12500,
 pressKilled: 255,
 medicalKilled: 1701,
-injured: 170361,
+injured: 170395,
 starved: 463
  };
 async function fetchCasualtyData() {
@@ -849,6 +1086,9 @@ function saveReview() {
     document.getElementById('reviewTitle').value = '';
     document.getElementById('content').value = '';
 
+    // 읽기 탭으로 전환
+    document.querySelectorAll('.tab-btn')[1].click();
+    
     // 목록 새로고침
     displayReviews();
 }
@@ -861,7 +1101,7 @@ function displayReviews() {
     if (reviews.length === 0) {
         reviewsList.innerHTML = `
             <div class="empty-state">
-                <p class="empty-state-text">No reviews yet.<br>Be the first to share your thoughts.</p>
+                <p>No reviews yet. Be the first to share your thoughts.</p>
             </div>
         `;
         updateReviewStats([]);
@@ -913,6 +1153,35 @@ function formatDate(dateString) {
         day: 'numeric' 
     }).toUpperCase();
 }
+
+// ===== 이미지 슬라이드쇼 =====
+let currentSlide = 0;
+let slideInterval;
+
+function startImageSlideshow() {
+const slides = document.querySelectorAll('.slide-container');
+
+// 3초마다 이미지 변경
+slideInterval = setInterval(() => {
+slides[currentSlide].classList.remove('active');
+currentSlide = (currentSlide + 1) % slides.length;
+slides[currentSlide].classList.add('active');
+}, 3000);
+}
+
+// 페이지 변경시 슬라이드쇼 정지
+function stopImageSlideshow() {
+if (slideInterval) {
+clearInterval(slideInterval);
+}
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
 </script>
 </body>
 </html>
